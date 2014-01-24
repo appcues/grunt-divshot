@@ -40,15 +40,14 @@ module.exports = function(grunt) {
       clean_urls: false,
       routes: {},
       cache_control: {},
-      exclude: [],
-      binPath: path.resolve(__dirname, '../node_modules/.bin')
+      exclude: []
     });
 
     var config = configFile(this.options());
 
     // Start the server
     var server = grunt.util.spawn({
-      cmd: path.join(config.binPath, 'superstatic'),
+      cmd: path.resolve(__dirname, '../node_modules/.bin/superstatic'),
       args: [
         '--port', options.port,
         '--host', options.hostname,
@@ -111,7 +110,7 @@ module.exports = function(grunt) {
       args = args.concat(['--token', config.token]);
     }
 
-    divshot(args, done, config);
+    divshot(args, done);
   }
 
   function promote(src, dest) {
@@ -123,12 +122,13 @@ module.exports = function(grunt) {
       args = args.concat(['--token', config.token]);
     }
 
-    divshot(args, done, config);
+    divshot(args, done);
   }
 
-  function divshot(args, done, config) {
+  function divshot(args, done) {
+    var cmd = path.resolve(__dirname, '../node_modules/.bin/divshot');
     var push = grunt.util.spawn({
-      cmd: path.join(config.binPath, 'divshot'),
+      cmd: cmd,
       args: args
     }, function(err, result, code) {
       if (err) {
