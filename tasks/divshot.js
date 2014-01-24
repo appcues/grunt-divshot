@@ -110,7 +110,7 @@ module.exports = function(grunt) {
       args = args.concat(['--token', config.token]);
     }
 
-    divshot(args, done);
+    divshot(args, done, config);
   }
 
   function promote(src, dest) {
@@ -122,11 +122,12 @@ module.exports = function(grunt) {
       args = args.concat(['--token', config.token]);
     }
 
-    divshot(args, done);
+    divshot(args, done, config);
   }
 
-  function divshot(args, done) {
-    var cmd = path.resolve(__dirname, '../node_modules/.bin/divshot');
+  function divshot(args, done, config) {
+    var binPath = config.binPath || path.resolve(__dirname, '../node_modules/.bin');
+    var cmd = path.join(binPath, 'divshot');
     var push = grunt.util.spawn({
       cmd: cmd,
       args: args
