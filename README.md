@@ -22,7 +22,7 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-divshot');
 ```
 
-## The "divshot" task
+## The "divshot:server" task
 
 ### Usage
 In your project's Gruntfile, add a section named `divshot` to the data object passed into `grunt.initConfig()`.
@@ -30,18 +30,16 @@ In your project's Gruntfile, add a section named `divshot` to the data object pa
 ```js
 grunt.initConfig({
   divshot: {
-    server: {
-      options: {
-        keepAlive: true,
-        port: 3474,
-        hostname: 'localhost',
-        root: './',
-        clean_urls: false,
-        routes: {
-          '**': 'index.html'
-        },
-        cache_control: {}
-      }
+    options: {
+      keep_alive: true,
+      port: 3474,
+      hostname: 'localhost',
+      root: './',
+      clean_urls: false,
+      routes: {
+        '**': 'index.html'
+      },
+      cache_control: {}
     }
   }
 })
@@ -49,11 +47,11 @@ grunt.initConfig({
 
 ### Options
 
-#### keepAlive
+#### keep_alive
 Type: `Boolean`
 Default value: `false`
 
-Once grunt's tasks have completed, the web server stops. This behavior can be changed with the `keepAlive` option
+Once grunt's tasks have completed, the web server stops. This behavior can be changed with the `keep_alive` option
 
 #### port
 Type: `Number`
@@ -93,12 +91,10 @@ Key/value pairs of glob to path cache control settings
 
 ## Deploying to Divshot.io with Grunt
 
-**grunt-divshot** automatically creates 4 tasks you can use to deploy to [Divshot.io](http://divshot.io) using Grunt.
+Deploying with **grunt-divshot** is similar to the syntax you'd use with the Divshot CLI. There are two main commands:
 
-* ` divshot:push:production `
-* ` divshot:push:staging `
-* ` divshot:push:development `
-* ` divshot:promote `
+* `divshot:push:<environment>`
+* `divshot:promote:<source_env>:<destination_env>`
 
 ### Usage
 In your project's Gruntfile, add a section named any of the above tasks.
@@ -111,17 +107,34 @@ divshot: {
     clean_urls: false,
     routes: {
       '**': 'index.html'
+    }
+  },
+  push: {
+    options: {
+      cache_control: {
+        "/": false
+      }
     },
-  }
-},
-'divshot:push:production': {
-  options: {
-    clean_urls: true,
-    cache_control: {
-      "/assets/**": 31536000,
-      "/": false
+    development: {
+      options: {
+        root: './dev'
+      }
     },
-    exclude: ['/src']
+    production: {
+      options: {
+        clean_urls: true,
+        cache_control: {
+          "/assets/**": 31536000,
+          "/": false
+        },
+        exclude: ['/src']
+      }
+    }
+  },
+  promote: {
+    options: {
+      token: 'special_token_for_promoted_deploys'
+    }
   }
 }
 ```
