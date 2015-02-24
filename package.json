@@ -40,8 +40,8 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "superstatic": "0.8.x",
-    "divshot-cli": "0.9.x",
+    "superstatic": "~2.0.2",
+    "divshot-cli": "~1.8.1",
     "lodash": "~2.3.0",
     "chalk": "~0.4.0"
   }
